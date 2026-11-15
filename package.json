@@ -1,0 +1,20 @@
+{
+  "name": "biblioteca-escolar",
+  "version": "1.0.0",
+  "description": "Sistema de biblioteca escolar — E.E.E.F. Dep. Armando Corrêa",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "redefinir-senha": "node --disable-warning=ExperimentalWarning src/redefinir-senha.js",
+    "test": "node --disable-warning=ExperimentalWarning --test tests/*.test.js"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.22.3",
+    "nodemailer": "^10.5.0"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22.13"
+  }
+}
