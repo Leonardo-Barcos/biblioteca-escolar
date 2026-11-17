@@ -5,3 +5,5 @@ dados-demo/
 *.db-shm
 *.db-wal
 .env
+.vercel
+.env.local

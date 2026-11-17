@@ -28,7 +28,7 @@ function cliente() {
 const daqui = (dias) => { const d = new Date(); d.setDate(d.getDate() + dias); return d.toLocaleDateString('sv-SE'); };
 
 before(async () => {
-  servidor = spawn(process.execPath, ['--disable-warning=ExperimentalWarning', path.join(__dirname, '..', 'src', 'server.js')], {
+  servidor = spawn(process.execPath, [path.join(__dirname, '..', 'src', 'server.js')], {
     env: { ...process.env, PORT: String(PORTA), DATA_DIR: DADOS },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
@@ -52,6 +52,12 @@ test('primeiro acesso cria a conta da direção', async () => {
   assert.equal(r.dados.usuario.perfil, 'direcao');
   r = await cliente()('POST', '/api/primeiro-acesso', { nome: 'Intruso', usuario: 'intruso', senha: '1234' });
   assert.equal(r.status, 400, 'não pode haver um segundo primeiro acesso');
+});
+
+test('verificação de saúde responde sem login', async () => {
+  const r = await fetch(BASE + '/saude');
+  assert.equal(r.status, 200);
+  assert.equal(r.headers.get('x-frame-options'), 'DENY');
 });
 
 test('sem login a API recusa', async () => {

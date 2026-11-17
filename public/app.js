@@ -720,7 +720,8 @@ async function pgConfiguracoes(area) {
       </div>
       <div class="resumo-lembrete" id="resumo">${ico('info')}<span></span></div>
       <p style="color:var(--texto-suave);margin-bottom:0">${c.email_ultima_execucao ? `Último envio automático: ${dataBR(c.email_ultima_execucao)}.` : 'Nenhum envio automático feito ainda.'}
-        O computador com o sistema precisa estar ligado; se estiver desligado no horário, os lembretes saem assim que ele for ligado.</p>
+        ${c.na_nuvem ? 'Os lembretes saem do servidor na nuvem, mesmo com os computadores da escola desligados.'
+          : 'O computador com o sistema precisa estar ligado; se estiver desligado no horário, os lembretes saem assim que ele for ligado.'}</p>
       <div class="acoes" style="margin-top:16px">
         <button type="button" class="btn btn-claro" id="previa">${ico('olho')} Ver quem receberia hoje</button>
         <button type="button" class="btn btn-claro" id="agora">${ico('enviar')} Enviar lembretes agora</button>
@@ -766,8 +767,10 @@ async function pgConfiguracoes(area) {
 
     <div class="cartao">
       <h2>${ico('baixar')} Cópia de segurança</h2>
-      <p class="sub">O sistema guarda sozinho uma cópia por dia (as últimas 14) na pasta <b>dados/copias-de-seguranca</b>.
-        ${c.backup_ultima_execucao ? `Última cópia: ${dataBR(c.backup_ultima_execucao)}.` : ''} Para mais segurança, baixe uma cópia de vez em quando e guarde num pen drive ou no Google Drive.</p>
+      <p class="sub">${c.na_nuvem
+        ? 'Os dados ficam guardados no banco de dados na nuvem. Uma vez por semana, baixe uma cópia completa e guarde no Google Drive ou num pen drive.'
+        : 'O sistema guarda sozinho uma cópia por dia (as últimas 14) na pasta <b>dados/copias-de-seguranca</b>. Para mais segurança, baixe uma cópia de vez em quando e guarde num pen drive ou no Google Drive.'}
+        ${c.backup_ultima_execucao ? `Última cópia: ${dataBR(c.backup_ultima_execucao)}.` : ''}</p>
       <div class="acoes">
         <a class="btn btn-primario" href="/api/backup">${ico('baixar')} Baixar cópia de segurança</a>
         <a class="btn btn-claro" href="/api/exportar/livros">Planilha de livros</a>
@@ -856,7 +859,8 @@ function entregarSenha(nome, usuario, senha) {
   janela({
     titulo: 'Acesso pronto!', pequena: true,
     corpo: `<p style="margin-top:0">Anote e entregue para <b>${h(nome)}</b>:</p>
-      <div class="cartao-senha"><div><span>Nome na tela de entrada</span><b>${h(nome)}</b></div>
+      <div class="cartao-senha"><div><span>Nome</span><b>${h(nome)}</b></div>
+      <div><span>Usuário (para entrar)</span><b>${h(usuario)}</b></div>
       <div><span>Senha provisória</span><b class="senha-grande">${h(senha)}</b></div></div>
       <p style="color:var(--texto-suave);margin-bottom:0">No primeiro acesso, o sistema pede para a pessoa criar a própria senha.</p>`,
     rodape: `<button type="button" class="btn btn-claro" onclick="window.print()">${ico('imprimir')} Imprimir</button><button type="button" class="btn btn-primario" data-fechar>${ico('ok')} Entendi</button>`,
@@ -885,9 +889,9 @@ function formUsuario(u, depois) {
     rodape: `<button type="button" class="btn btn-claro" data-fechar>Cancelar</button><button type="submit" class="btn btn-primario">${ico('salvar')} ${novo ? 'Cadastrar' : 'Salvar'}</button>`,
     aoEnviar: async (dados, dlg) => {
       if (novo) {
-        await api('POST', '/api/usuarios', dados);
+        const r = await api('POST', '/api/usuarios', dados);
         dlg.close(); depois && depois();
-        entregarSenha(dados.nome, dados.usuario, dados.senha);
+        entregarSenha(dados.nome, r.usuario, dados.senha);
       } else {
         await api('PUT', `/api/usuarios/${u.id}`, dados);
         aviso('Acesso atualizado.'); dlg.close(); depois && depois();
@@ -1048,7 +1052,23 @@ function telaEntrada(conteudo) {
     <h1>Biblioteca</h1><p>${h(estado.escola)}</p>${conteudo}</div></div>`;
 }
 
+function telaLoginUsuario() {
+  telaEntrada(`<form id="login">
+      ${campo({ nome: 'usuario', rotulo: 'Usuário', ajuda: 'Ex.: maria.souza', attrs: 'autocomplete="username" autocapitalize="none" spellcheck="false"' })}
+      ${campo({ nome: 'senha', rotulo: 'Senha', tipo: 'password', attrs: 'autocomplete="current-password"' })}
+      <button class="btn btn-primario btn-g" type="submit">${ico('seta')} Entrar</button>
+    </form>`);
+  const f = $('#login');
+  f.usuario.focus();
+  f.onsubmit = async (ev) => {
+    ev.preventDefault();
+    try { await api('POST', '/api/login', { usuario: f.usuario.value.trim(), senha: f.senha.value }); iniciar(); }
+    catch (e) { falha(e); f.senha.select(); }
+  };
+}
+
 function telaLogin(equipe) {
+  if (!equipe.length) return telaLoginUsuario();
   telaEntrada(`<h2 class="login-pergunta">Quem está entrando?</h2>
     <div class="pessoas">${equipe.map((p) => `<button type="button" class="pessoa" data-usuario="${h(p.usuario)}"><span class="avatar">${h(iniciais(p.nome))}</span><span>${h(p.nome)}</span></button>`).join('')}</div>
     <form id="login" class="oculto">

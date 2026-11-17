@@ -16,10 +16,10 @@ verde "1/4 · Preparando o Linux…"
 sudo apt-get update -qq
 sudo apt-get install -y -qq curl ca-certificates >/dev/null
 
-# Node.js 22.13 ou mais novo (o Debian do Chromebook vem com uma versão antiga)
+# Node.js 20 ou mais novo (o Debian do Chromebook vem com uma versão antiga)
 precisa_node=1
 if command -v node >/dev/null 2>&1; then
-  node -e 'const [a,b]=process.versions.node.split(".").map(Number); process.exit(a>22||(a===22&&b>=13)?0:1)' && precisa_node=0
+  node -e 'process.exit(Number(process.versions.node.split(".")[0])>=20?0:1)' && precisa_node=0
 fi
 if [ "$precisa_node" = 1 ]; then
   verde "2/4 · Instalando o Node.js…"
@@ -43,7 +43,7 @@ Type=simple
 User=$(whoami)
 WorkingDirectory=${PASTA}
 Environment=PORT=${PORTA}
-ExecStart=$(command -v node) --disable-warning=ExperimentalWarning src/server.js
+ExecStart=$(command -v node) src/server.js
 Restart=always
 RestartSec=3
 
