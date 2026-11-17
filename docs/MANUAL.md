@@ -39,6 +39,35 @@ São só 2 dependências. Funciona offline; a internet só é usada para enviar 
 
 **Para usar em outros computadores ou no celular da escola** (mesma rede Wi-Fi): a janela preta mostra um endereço como `http://192.168.0.15:3000`. É só abrir esse endereço no navegador do outro aparelho. Se não abrir, libere a porta 3000 no Firewall do Windows quando ele perguntar.
 
+## Instalação em Chromebook (Chrome OS)
+
+O Chrome OS não roda o Node diretamente. O sistema funciona dentro do **ambiente Linux** que vem no Chromebook.
+
+1. **Ative o Linux:** Configurações → Avançado → Desenvolvedores → *Ambiente de desenvolvimento do Linux* → **Ativar**. Reserve pelo menos 10 GB. Se a opção não aparecer ou estiver bloqueada, o Chromebook é gerenciado pela secretaria e o Linux foi desativado pelo administrador (veja o fim desta seção).
+2. **Leve o projeto para o Linux:** coloque o `.zip` do projeto na pasta **Arquivos do Linux** (pelo app Arquivos). No **Terminal**, rode:
+   ```
+   sudo apt-get install -y unzip
+   unzip biblioteca-escolar-main.zip
+   cd biblioteca-escolar-main
+   ```
+3. **Instale com um comando só:**
+   ```
+   bash instalar-chromebook.sh
+   ```
+   O script instala o Node.js, as dependências e deixa o sistema configurado para ligar sozinho junto com o Linux.
+4. **Abra no Chrome:** `http://localhost:3000`. Para os professores, crie um atalho: menu ⋮ do Chrome → *Transmitir, salvar e compartilhar* → *Criar atalho* → marque **Abrir como janela**. Depois fixe o ícone na barra.
+
+**No dia a dia**
+- O Linux não liga sozinho quando o Chromebook liga. Depois de entrar na conta, **abra o app Terminal uma vez** e pode fechar a janela: o sistema continua rodando.
+- Para os lembretes saírem no horário, desative a suspensão com a tampa fechada (Configurações → Dispositivo → Energia). Se o Chromebook estiver dormindo no horário, os e-mails saem quando ele acordar.
+- **Outros aparelhos na rede** (celular, outro computador): Configurações → Desenvolvedores → Linux → *Encaminhamento de portas* → adicionar a porta **3000** (TCP). O endereço é o IP do Chromebook, por exemplo `http://192.168.0.20:3000`.
+
+**Cópias de segurança no Chromebook.** Os dados ficam dentro do Linux. Se o Chromebook for formatado (*Powerwash*) ou o Linux for removido, eles se perdem. Uma vez por semana, copie a pasta `dados/copias-de-seguranca` para o Google Drive pelo app Arquivos, ou use Configurações → Linux → *Backup e restauração*.
+
+**Para atualizar o sistema:** substitua os arquivos pelos da versão nova, mantendo a pasta `dados`, e rode de novo `bash instalar-chromebook.sh`.
+
+**Se o Linux estiver bloqueado:** peça ao responsável pelos Chromebooks da escola para liberar o *Ambiente de desenvolvimento do Linux* no Google Admin. Se não for possível, rode o sistema em outro computador da escola (Windows) ou num servidor na internet.
+
 ## Equipe e permissões
 
 | | Bibliotecário(a) | Direção |
@@ -83,7 +112,8 @@ A senha vira **biblioteca** e o sistema pede uma nova no próximo acesso. Nenhum
 
 ```
 biblioteca/
-├── iniciar.bat           # liga o sistema com dois cliques
+├── iniciar.bat           # liga o sistema com dois cliques (Windows)
+├── instalar-chromebook.sh  # instalação no Chromebook / Linux
 ├── src/
 │   ├── server.js         # rotas da API
 │   ├── db.js             # banco SQLite e configurações padrão

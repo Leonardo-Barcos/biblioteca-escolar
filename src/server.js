@@ -450,7 +450,7 @@ app.delete('/api/emprestimos/:id', rota((req) => {
 // ---------------- histórico ----------------
 app.get('/api/atividades', rota((req) => {
   const lim = Math.min(1000, Number(req.query.limite) || 300);
-  return db.prepare('SELECT * FROM atividades ORDER BY id DESC LIMIT ?').all(lim);
+  return db.prepare('SELECT * FROM atividades ORDER BY criado_em DESC, id DESC LIMIT ?').all(lim);
 }));
 app.get('/api/emails', rota(() => db.prepare(`
   SELECT m.*, a.nome AS aluno_nome, l.titulo AS livro_titulo
@@ -458,7 +458,7 @@ app.get('/api/emails', rota(() => db.prepare(`
     LEFT JOIN emprestimos e ON e.id = m.emprestimo_id
     LEFT JOIN alunos a ON a.id = e.aluno_id
     LEFT JOIN livros l ON l.id = e.livro_id
-   ORDER BY m.id DESC LIMIT 500`).all()));
+   ORDER BY m.enviado_em DESC, m.id DESC LIMIT 500`).all()));
 
 // ---------------- configurações ----------------
 const CHAVES_EDITAVEIS = ['escola_nome', 'prazo_padrao_dias', 'max_livros_por_aluno', 'email_ativo', 'email_horario',

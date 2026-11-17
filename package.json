@@ -5,8 +5,9 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node --disable-warning=ExperimentalWarning src/server.js",
-    "redefinir-senha": "node --disable-warning=ExperimentalWarning src/redefinir-senha.js",
-    "test": "node --disable-warning=ExperimentalWarning --test tests/*.test.js"
+    "demo": "node --disable-warning=ExperimentalWarning src/demo.js",
+    "test": "node --disable-warning=ExperimentalWarning --test tests/*.test.js",
+    "redefinir-senha": "node --disable-warning=ExperimentalWarning src/redefinir-senha.js"
   },
   "license": "UNLICENSED",
   "dependencies": {
