@@ -57,7 +57,7 @@ npm run demo       # mesma coisa, mas com dados fictícios para explorar (senha:
 npm test           # testes unitários e de ponta a ponta
 ```
 
-No primeiro acesso, o sistema pede para criar a conta da direção. O modo demo usa uma pasta separada (`dados-demo/`), recriada a cada execução, e não mexe nos dados reais. No Windows, o `iniciar.bat` instala e abre tudo com dois cliques. No Chromebook (ambiente Linux) ou em qualquer Debian/Ubuntu, `bash instalar-chromebook.sh` instala o Node, as dependências e um serviço que liga o sistema sozinho. O passo a passo para a escola (instalação, Gmail, cópias de segurança) está no [manual](docs/MANUAL.md).
+No primeiro acesso, o sistema pede para criar a conta da direção. O modo demo usa uma pasta separada (`dados-demo/`), recriada a cada execução, e não mexe nos dados reais. No Windows, o `instalar.bat` instala tudo e cria um ícone "Biblioteca" que abre o sistema numa janela própria, como um programa. Ele também liga o servidor em segundo plano junto com o Windows. No Chromebook (ambiente Linux) ou em qualquer Debian/Ubuntu, `bash instalar-chromebook.sh` instala o Node, as dependências e um serviço que liga o sistema sozinho. O passo a passo para a escola (instalação, Gmail, cópias de segurança) está no [manual](docs/MANUAL.md).
 
 ## Estrutura
 

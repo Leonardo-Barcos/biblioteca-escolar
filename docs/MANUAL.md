@@ -29,15 +29,25 @@ São só 2 dependências. Funciona offline; a internet só é usada para enviar 
 
 ## Instalação no computador da escola (Windows)
 
-1. Instale o **Node.js LTS** (versão 22.13 ou mais nova) em <https://nodejs.org>.
-2. Copie a pasta `biblioteca` para o computador, por exemplo em `C:\Biblioteca`.
-3. Dê dois cliques em **`iniciar.bat`**. Na primeira vez ele instala o que precisa e abre o navegador.
-4. No primeiro acesso, o sistema pede para criar a **conta da direção**. Depois disso, a direção cadastra as bibliotecárias na aba **Equipe**.
-5. Deixe a janela preta aberta enquanto usar o sistema. Pode minimizar, mas não feche.
+**Uma vez só**
+1. Instale o **Node.js LTS** (o botão verde em <https://nodejs.org>), clicando em *Avançar* até o fim.
+2. Copie a pasta do sistema para **`C:\Biblioteca`**. Evite a Área de Trabalho e pastas do OneDrive.
+3. Dê dois cliques em **`instalar.bat`**. Ele confere o Node, instala o sistema, cria os atalhos e abre a biblioteca.
+4. No primeiro acesso, crie a **conta da direção**. Depois, cadastre as bibliotecárias na aba **Equipe**.
 
-**Para ligar sozinho com o Windows:** aperte `Win + R`, digite `shell:startup`, Enter, e coloque ali um atalho para o `iniciar.bat`.
+O instalador cria:
+- **"Biblioteca" na Área de Trabalho e no menu Iniciar:** abre o sistema numa janela própria, como um programa. Se o sistema estiver desligado, o ícone liga sozinho.
+- **"Biblioteca (ligar sistema)" na inicialização do Windows:** liga o sistema em segundo plano assim que o computador é ligado, para os lembretes saírem no horário.
 
-**Para usar em outros computadores ou no celular da escola** (mesma rede Wi-Fi): a janela preta mostra um endereço como `http://192.168.0.15:3000`. É só abrir esse endereço no navegador do outro aparelho. Se não abrir, libere a porta 3000 no Firewall do Windows quando ele perguntar.
+Não fica nenhuma janela preta aberta. O sistema roda escondido, e as mensagens técnicas ficam em `dados\servidor.log`.
+
+**No dia a dia:** clicar no ícone **Biblioteca** → clicar no próprio nome → digitar a senha.
+
+**Recomendado:** em Configurações → Sistema → Energia, deixe a suspensão em **Nunca** quando o computador estiver ligado na tomada, para os lembretes saírem no horário.
+
+**Se algo não abrir:** reinicie o computador. Se continuar, dê dois cliques em `iniciar.bat`: ele abre o sistema numa janela preta que mostra a mensagem de erro.
+
+**Para usar em outros aparelhos da escola** (mesma rede): quando o Windows perguntar sobre o Firewall, marque *Redes privadas* e permita. O endereço é o IP do computador, por exemplo `http://192.168.0.15:3000`.
 
 ## Instalação em Chromebook (Chrome OS)
 
@@ -112,7 +122,9 @@ A senha vira **biblioteca** e o sistema pede uma nova no próximo acesso. Nenhum
 
 ```
 biblioteca/
-├── iniciar.bat           # liga o sistema com dois cliques (Windows)
+├── instalar.bat          # instalação no Windows (atalhos e início automático)
+├── iniciar.bat           # liga o sistema mostrando a janela (para diagnosticar problemas)
+├── windows/              # scripts e ícone usados pelo instalador do Windows
 ├── instalar-chromebook.sh  # instalação no Chromebook / Linux
 ├── src/
 │   ├── server.js         # rotas da API
